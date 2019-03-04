@@ -28,14 +28,15 @@ class App extends Component {
       })
     })
       .then(res => res.json())
-      .then(json => this.setState({ results: json, isLoading: false }))
-      .catch(e => console.error("Error requesting, please ensure data entered is correct"));
+      .then(json => this.setState({ results: json, isLoading: false, error: null }))
+      .catch(e => console.error("Error requesting, please ensure data entered is correct |", e));
   };
 
   handleSubmit = event => {
 
     const intValue = parseInt(this.state.upperLimit);
 
+    // input validation
     if (this.state.upperLimit.length === 0){
       this.setState({error: "Ensure that you entered a value."})
     }
@@ -59,11 +60,13 @@ class App extends Component {
 
   render() {
 
+
+    // dynamically show loading spinner, result text or error message
     let renderedResults;
     let startText = "";
     if (this.state.isLoading){
       renderedResults = <LoadingSpinner/>;
-    } else if (this.state.error != null) {
+    } else if (this.state.error) {
       renderedResults = <Error message={this.state.error}/>
     } else if (this.state.results == null) {
       renderedResults = ""
@@ -80,7 +83,6 @@ class App extends Component {
 
     return (
       <div className="App">
-        <header className="App-header">
           <h1> Median Prime Number Calculator </h1>
           <h5>
             Submit a number below to receive the median number(s) of the set of
@@ -100,8 +102,6 @@ class App extends Component {
           <br/>
 
           {startText}{renderedResults}
-
-        </header>
       </div>
     );
   }
