@@ -10,7 +10,7 @@ const port = 3005;
 app.use(cors());
 app.use(express.json()); // <==== parse request body as JSON
 
-app.post('/getMedianPrime', (req, res) => {
+app.post('/getMedianPrimes', (req, res) => {
 
 
     const n = parseInt(req.body.upperLimit);

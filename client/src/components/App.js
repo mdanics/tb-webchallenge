@@ -17,7 +17,7 @@ class App extends Component {
 
   fetchMedianPrimes = () => {
     this.setState({ isLoading: true });
-    fetch("http://localhost:3005/getMedianPrime", {
+    fetch("http://localhost:3005/getMedianPrimes", {
       method: "post",
       headers: {
         Accept: "application/json",
