@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
 import LoadingSpinner from "./loadingSpinner/loadingSpinner";
+import Error from "./errorMessage/errorMessage";
 
 class App extends Component {
   constructor() {
@@ -9,6 +10,7 @@ class App extends Component {
     this.state = {
       upperLimit: "",
       results: null,
+      error: null,
       isLoading: false
     };
   }
@@ -27,11 +29,27 @@ class App extends Component {
     })
       .then(res => res.json())
       .then(json => this.setState({ results: json, isLoading: false }))
-      .catch(e => console.error("bigmen", e));
+      .catch(e => console.error("Error requesting, please ensure data entered is correct"));
   };
 
   handleSubmit = event => {
-    this.fetchMedianPrimes();
+
+    const intValue = parseInt(this.state.upperLimit);
+
+    if (this.state.upperLimit.length === 0){
+      this.setState({error: "Ensure that you entered a value."})
+    }
+
+    else if (intValue < 0){
+      this.setState({error: "Ensure that you entered a positive integer."})
+    }
+
+    else if (isNaN(intValue)) {
+      this.setState({error: "Ensure that you entered a valid integer."})
+    } else {
+      this.fetchMedianPrimes();
+    }
+
     event.preventDefault();
   };
 
@@ -45,6 +63,8 @@ class App extends Component {
     let startText = "";
     if (this.state.isLoading){
       renderedResults = <LoadingSpinner/>;
+    } else if (this.state.error != null) {
+      renderedResults = <Error message={this.state.error}/>
     } else if (this.state.results == null) {
       renderedResults = ""
     } else {
@@ -56,6 +76,7 @@ class App extends Component {
         startText = "The median prime numbers are: ";
       }
     }
+
 
     return (
       <div className="App">
@@ -69,12 +90,12 @@ class App extends Component {
           <form onSubmit={this.handleSubmit}>
             <label>
               Enter the upper bound number: <br/>
-              <input type="text" value={this.state.upperLimit} onChange={this.handleChange}/>
+              <input type="text" value={this.state.upperLimit} onChange={this.handleChange} className="input"/>
             </label>
 
             <br/>
 
-            <input type="submit" value="Submit"/>
+            <input type="submit" value="Submit" className="submitBtn"/>
           </form>
           <br/>
 
