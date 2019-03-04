@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 
-const eratosthenes = require("./eratosthenesAlgorithm");
+const findMedianPrimes = require("./findMedianPrimes");
 
 const app = express();
 
@@ -10,7 +10,7 @@ const port = 3005;
 app.use(cors());
 app.use(express.json()); // <==== parse request body as JSON
 
-app.post('/', (req, res) => {
+app.post('/getMedianPrime', (req, res) => {
 
 
     const n = parseInt(req.body.upperLimit);
@@ -37,7 +37,7 @@ app.post('/', (req, res) => {
     }
 
 
-    const result = eratosthenes.calculate(req.body.upperLimit);
+    const result = findMedianPrimes.calculate(req.body.upperLimit);
 
     return res.json(result)
 });
